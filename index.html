@@ -1614,10 +1614,15 @@ function fetchSelectedQuestions() {
 
 function buildQuestionsFrom(allQ) {
   if (selectedMode === 'all') {
+    var subjMeta = selectedSubjectSingle
+      ? MANIFEST.subjects.find(function(s){ return s.id === selectedSubjectSingle; })
+      : null;
     var filtered = allQ.filter(function(q) {
       if (!q) return false;
       var okYear = (q.year === selectedYear);
-      var okSubj = (!selectedSubjectSingle || q.subject === selectedSubjectSingle);
+      var okSubj = !selectedSubjectSingle
+        || q.subject === selectedSubjectSingle
+        || (subjMeta && q.subject === subjMeta.name);
       return okYear && okSubj;
     });
     if (filtered.length === 0) { showToast('該当する問題がありません'); return null; }
